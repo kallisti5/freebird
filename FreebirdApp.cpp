@@ -25,22 +25,19 @@ PlayerView::PlayerView(BRect frame)
 
 // Draw our player view
 void PlayerView::Draw(BRect updateRect) {
-        MovePenTo(BPoint(20,75));
-        DrawString("Hello Freebird you crazy cat!");
+        MovePenTo(BPoint(148,20));
+        DrawString("Title: Awesomesauce");
+        MovePenTo(BPoint(148,35));
+        DrawString("Author: Elite Midgets");
 
         BButton *buttonPLAY;
-        buttonPLAY = new BButton(BRect (10.0,135.0,60.0,30.0), "PLAYButton", "Play", new BMessage(BUTTON_PLAY_MSG));
+        buttonPLAY = new BButton(BRect (10.0,145.0,60.0,30.0), "PLAYButton", "Play", new BMessage(BUTTON_PLAY_MSG));
         BButton *buttonPAUSE;
-        buttonPAUSE = new BButton(BRect (65.0,135.0,120.0,30.0), "PAUSEButton", "Pause", new BMessage(BUTTON_PAUSE_MSG));
-        BButton *buttonPREV;
-        buttonPREV = new BButton(BRect (125.0,135.0,175.0,30.0), "PREVButton", "Prev", new BMessage(BUTTON_PREV_MSG));
-        BButton *buttonNEXT;
-        buttonNEXT = new BButton(BRect (180.0,135.0,240.0,30.0), "NEXTButton", "Next", new BMessage(BUTTON_NEXT_MSG));
-
+        buttonPAUSE = new BButton(BRect (65.0,145.0,120.0,30.0), "PAUSEButton", "Pause", new BMessage(BUTTON_PAUSE_MSG));
         AddChild(buttonPLAY);
         AddChild(buttonPAUSE);
-        AddChild(buttonPREV);
-        AddChild(buttonNEXT);
+
+	FillRect(BRect(10,10,138,138), B_SOLID_HIGH);	// Album artwork TODO
 }
 
 
@@ -74,7 +71,7 @@ FreebirdApp::FreebirdApp()
                 : BApplication("application/x-vnd.FreeBird") {
         BRect windowRect;
 
-        windowRect.Set(50,50,400,400);
+        windowRect.Set(50,50,400,230);
         theWindow = new PlayerWindow(windowRect);
 }
 
