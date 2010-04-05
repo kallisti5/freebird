@@ -25,6 +25,10 @@ PlayerView::PlayerView(BRect frame)
 
 // Draw our player view
 void PlayerView::Draw(BRect updateRect) {
+	Utils util;
+
+	util.debug("PlayerView::Draw called",0);
+
         MovePenTo(BPoint(148,20));
         DrawString("Title: Awesomesauce");
         MovePenTo(BPoint(148,35));
