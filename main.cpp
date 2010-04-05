@@ -5,10 +5,9 @@
 // Here we go...
 int main(void)
 {
-
 Utils util;
 
-util.debug(1);
+util.debug("enter main()", 1);
 
 return -1;
 }

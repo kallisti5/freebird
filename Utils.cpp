@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "Utils.h"
 
-void Utils::debug(int issue)
+void Utils::debug(const char * message, int fatal)
 {
-	printf("NOES! -> %i\n", issue);
+	printf("DEBUG: %s\n", message);
 }

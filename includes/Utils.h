@@ -3,7 +3,7 @@
 
 class Utils {
         public:
-                void debug (int);
+                void debug (const char *, int);
         };
 
 #endif
