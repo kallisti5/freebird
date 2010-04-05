@@ -5,9 +5,10 @@
 // Here we go...
 int main(void)
 {
-Utils util;
+	Utils util;
+	util.debug("enter main()", 0);
+	
 
-util.debug("enter main()", 1);
-
-return -1;
+	util.debug("exit main()", 1);
+	return 0;
 }
