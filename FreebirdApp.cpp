@@ -1,7 +1,20 @@
 /*
- * FreeBird
- * here we take care of drawing the basics of the interface
+ * Freebird, the Music Jukebox for Haiku
+ * 2010, Alexander von Gluck
+ * http://unixzen.com, http://github.com/kallisti5
  *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <Application.h>
@@ -9,8 +22,10 @@
 #include <View.h>
 #include <Button.h>
 
-#include "Utils.h"
-#include "FreebirdPlayer.h"
+#include "FreebirdUtils.h"	// Debug stuff and generic functions
+#include "FreebirdPlayer.h"	// Stuff for the player window
+#include "FreebirdEngine.h"	// Engine stuff (file management)
+
 
 class PlayerView : public BView {
         public:
@@ -79,12 +94,18 @@ FreebirdApp::FreebirdApp()
         theWindow = new PlayerWindow(windowRect);
 }
 
+
 void main(void) {
+
         Utils util; // utilities including debug statements
         util.debug("enter main()", 0);
 
+	FreebirdEngine *theEngine;
 	FreebirdApp *theApp;
+
 	theApp = new(FreebirdApp);
+
+	theEngine->ReindexMusic("/boot/home/Music");
 	theApp->Run();
 	delete theApp;
         util.debug("exit main()", 1);

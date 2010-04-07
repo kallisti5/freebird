@@ -17,4 +17,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-This is in HEAVY development and should be considered alpha grade software at best for the moment.
+#include <Entry.h>
+#include <storage/Directory.h>
+
+#include "FreebirdUtils.h"
+#include "FreebirdEngine.h"
+
+bool FreebirdEngine::ReindexMusic(const char *path)
+{
+        Utils util; // utilities including debug statements
+
+        BDirectory dir(path);
+        BEntry entry;
+
+        dir.Rewind();
+        while (dir.GetNextEntry(&entry) == B_OK)
+                {
+                        util.debug("file",0);
+                }
+}

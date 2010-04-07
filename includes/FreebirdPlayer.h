@@ -1,4 +1,4 @@
-#define	BUTTON_PLAY_MSG		'|>'
-#define	BUTTON_PAUSE_MSG	'||'
-#define	BUTTON_NEXT_MSG		'>'
-#define	BUTTON_PREV_MSG		'<'
+#define	BUTTON_PLAY_MSG		'PLAY'
+#define	BUTTON_PAUSE_MSG		'PAUS'
+#define	BUTTON_NEXT_MSG		'NEXT'
+#define	BUTTON_PREV_MSG		'PREV'
