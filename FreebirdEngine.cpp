@@ -26,6 +26,7 @@
 bool FreebirdEngine::ReindexMusic(const char *path)
 {
         Utils util; // utilities including debug statements
+	util.debug("FreebirdEngine::ReindexMusic called",0);
 
         BDirectory dir(path);
         BEntry entry;
@@ -33,6 +34,6 @@ bool FreebirdEngine::ReindexMusic(const char *path)
         dir.Rewind();
         while (dir.GetNextEntry(&entry) == B_OK)
                 {
-                        util.debug("file",0);
+                        util.debug("FreebirdEngine::ReindexMusic found a file",0);
                 }
 }
