@@ -7,7 +7,7 @@
 ## Application Specific Settings ---------------------------------------------
 
 # specify the name of the binary
-NAME=freebird
+NAME=Freebird
 
 # specify the type of binary
 #	APP:	Application
@@ -34,7 +34,7 @@ SRCS= FreebirdEngine.cpp FreebirdUtils.cpp FreebirdApp.cpp
 
 #	specify the resource definition files to use
 #	full path or a relative path to the resource file can be used.
-RDEFS= resources/Freebird.rdef
+RDEFS= Freebird.rdef
 	
 #	specify the resource files to use. 
 #	full path or a relative path to the resource file can be used.
