@@ -67,7 +67,8 @@ class PlayerWindow : public BWindow {
 };
 
 PlayerWindow::PlayerWindow(BRect frame)
-		: BWindow(frame, "Freebird Player", B_TITLED_WINDOW, B_NOT_RESIZABLE|B_NOT_ZOOMABLE) {
+		: BWindow(frame, "Freebird Player",
+			B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL, B_NOT_RESIZABLE|B_NOT_ZOOMABLE|B_ASYNCHRONOUS_CONTROLS) {
 			AddChild(new PlayerView(Bounds()));
 			Show();
 }
