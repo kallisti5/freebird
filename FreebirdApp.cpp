@@ -96,7 +96,7 @@ FreebirdApp::FreebirdApp()
 }
 
 
-void main(void) {
+int main(void) {
 
         Utils util; // utilities including debug statements
         util.debug("enter main()", 0);
@@ -110,4 +110,5 @@ void main(void) {
 	theApp->Run();
 	delete theApp;
         util.debug("exit main()", 1);
+	return 0;
 }
