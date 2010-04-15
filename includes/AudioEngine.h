@@ -20,16 +20,27 @@
 #ifndef _AUDIO_ENGINE_H
 #define _AUDIO_ENGINE_H
 
+#include <Entry.h>
 #include <SoundPlayer.h>
+#include <MediaFile.h>
+#include <Path.h>
+#include <malloc.h>
 
 
 class AudioEngine {
 	public:
+		virtual		~AudioEngine();
 		bool		IsPlaying() { return isPlaying; };
+
+		status_t	InitCheck() { return ((player != NULL)?B_OK:B_ERROR); };
+		status_t	Play();
+		status_t	Stop();
+		status_t	SetSource(const char *path);
 		
 	private:
 		bool		isPlaying;
 		BSoundPlayer	*player;
+		BMediaFile*	fMediaFile;
 
 		void		Lock();			// Semaphore locking
 		void		Unlock();
