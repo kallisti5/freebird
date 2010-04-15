@@ -18,3 +18,13 @@
  */
 
 #include "AudioEngine.h"
+
+void AudioEngine::Lock() {
+	if (atomic_add(&lock_count, 1) > 0)
+		acquire_sem(lock_sem);
+}
+
+void AudioEngine::Unlock() {
+	if (atomic_add(&lock_count, -1) > 1)
+		release_sem(lock_sem);
+}
