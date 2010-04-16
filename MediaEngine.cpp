@@ -53,6 +53,7 @@ MediaEngine::SetSource(const char *path) {
 	entry_ref	ref;
 
 	err = get_ref_for_path(path, &ref);
+
 	if (err != B_NO_ERROR)
 		return (err);
 
@@ -62,6 +63,7 @@ MediaEngine::SetSource(const char *path) {
 
 	if (fMediaFile = NULL)
 		return (B_ERROR);
+
 
 	bool		foundTrack = false;
 	int32		numTracks = fMediaFile->CountTracks();
@@ -73,7 +75,7 @@ MediaEngine::SetSource(const char *path) {
 		BMediaTrack *track = fMediaFile->TrackAt(i);
 		
 		if (track == NULL) {
-			// TODO Reset();
+			Reset();
 			return (B_ERROR);
 		}
 		else {
@@ -110,4 +112,14 @@ MediaEngine::SetSource(const char *path) {
 	// TODO if (foundTrack)
 
 	return B_NO_ERROR;
+}
+
+void MediaEngine::Reset()
+{
+
+fAudioTrack = NULL;
+
+delete(fMediaFile);
+fMediaFile = NULL;
+
 }

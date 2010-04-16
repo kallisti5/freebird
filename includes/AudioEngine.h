@@ -40,7 +40,6 @@ class AudioEngine {
 	private:
 		bool		isPlaying;
 		BSoundPlayer	*player;
-		BMediaFile*	fMediaFile;
 		BMediaTrack*	track;
 
 		void		Lock();			// Semaphore locking
