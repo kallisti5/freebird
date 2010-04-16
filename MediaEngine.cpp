@@ -20,22 +20,20 @@
 #include "FreebirdUtils.h"
 #include "MediaEngine.h"
 
-status_t MediaEngine::SetAudioTrack (
-	const char	*path, 
-	BMediaTrack	*track,
-	media_format	*format )
-{
+status_t 
+MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format) {
 
 	if (fAudioTrack != NULL)
 		return (B_ERROR);
 
-	fAudioTrack = track;
+	//fAudioTrack = track;
 
-	/* fAudioOutput = new AudioOutput(fAudioTrack, BPath(path).Leaf());
-	status_t err = fAudioOutput->InitCheck();
+	/*
+	fAudioEngine = new AudioEngine(fAudioTrack, BPath(path).Leaf());
+	status_t err = fAudioEngine->InitCheck();
 	if (error != B_NO_ERROR) {
-		delete (fAudioOutput);
-		fAudioOutput = NULL;
+		delete (fAudioEngine);
+		fAudioEngine = NULL;
 		fAudioTrack = NULL;
 		
 		return (err);
@@ -47,7 +45,8 @@ status_t MediaEngine::SetAudioTrack (
 	return (B_NO_ERROR);
 }
 
-status_t MediaEngine::SetSource(const char *path) {
+status_t
+MediaEngine::SetSource(const char *path) {
 	Utils util;
 
 	status_t	err = B_ERROR;

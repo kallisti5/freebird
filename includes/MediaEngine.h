@@ -28,9 +28,6 @@
 #include <Path.h>
 #include <malloc.h>
 
-#include "AudioEngine.h"
-
-class AudioEngine;
 
 class MediaEngine {
 	public:
@@ -38,11 +35,9 @@ class MediaEngine {
 
 	private:
 		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
-
-	private:
 		BMediaFile*	fMediaFile;
 		BMediaTrack*	fAudioTrack;
-		AudioEngine*	fAudioEngine;
-}
+		BMediaTrack*	track;
+};
 
 #endif
