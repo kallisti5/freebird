@@ -26,7 +26,7 @@ MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *
 	if (fAudioTrack != NULL)
 		return (B_ERROR);
 
-	//fAudioTrack = track;
+	fAudioTrack = track;
 
 	/*
 	fAudioEngine = new AudioEngine(fAudioTrack, BPath(path).Leaf());
@@ -56,7 +56,12 @@ MediaEngine::SetSource(const char *path) {
 	if (err != B_NO_ERROR)
 		return (err);
 
+	util.debug("MediaEngine::SetSource passing media file reference to BMediaFile", 0);
+
 	fMediaFile = new BMediaFile(&ref);
+
+	if (fMediaFile = NULL)
+		return (B_ERROR);
 
 	bool		foundTrack = false;
 	int32		numTracks = fMediaFile->CountTracks();
