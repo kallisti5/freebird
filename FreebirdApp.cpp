@@ -25,6 +25,7 @@
 #include "FreebirdUtils.h"	// Debug stuff and generic functions
 #include "FreebirdPlayer.h"	// Stuff for the player window
 #include "FreebirdEngine.h"	// Engine stuff (file management)
+#include "MediaEngine.h"	// Media Engine stuff (audio playback)
 
 
 class PlayerView : public BView {
@@ -101,12 +102,14 @@ int main(void) {
         Utils util; // utilities including debug statements
         util.debug("enter main()", 0);
 
+	MediaEngine *mediaEngine;
 	FreebirdEngine *theEngine;
 	FreebirdApp *theApp;
 
 	theApp = new(FreebirdApp);
 
-	theEngine->ReindexMusic("/boot/home/Music");
+	//theEngine->ReindexMusic("/boot/home/Music");
+	mediaEngine->SetSource("/boot/home/test");
 	theApp->Run();
 	delete theApp;
         util.debug("exit main()", 1);

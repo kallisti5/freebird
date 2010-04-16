@@ -41,11 +41,13 @@ class AudioEngine {
 		bool		isPlaying;
 		BSoundPlayer	*player;
 		BMediaFile*	fMediaFile;
+		BMediaTrack*	track;
 
 		void		Lock();			// Semaphore locking
 		void		Unlock();
 		sem_id		lock_sem;
 		int32		lock_count;
+
 };
 
 #endif

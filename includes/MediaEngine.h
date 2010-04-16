@@ -37,7 +37,6 @@ class MediaEngine {
 		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
 		BMediaFile*	fMediaFile;
 		BMediaTrack*	fAudioTrack;
-		BMediaTrack*	track;
 };
 
 #endif
