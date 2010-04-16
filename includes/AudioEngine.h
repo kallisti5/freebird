@@ -23,6 +23,8 @@
 #include <Entry.h>
 #include <SoundPlayer.h>
 #include <MediaFile.h>
+#include <MediaTrack.h>
+#include <MediaDefs.h>
 #include <Path.h>
 #include <malloc.h>
 
@@ -46,6 +48,12 @@ class AudioEngine {
 		void		Unlock();
 		sem_id		lock_sem;
 		int32		lock_count;
+
+		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
+
+	private:
+		BMediaTrack*	fAudioTrack;
+		//AudioOutput*	fAudioOutput;
 };
 
 #endif
