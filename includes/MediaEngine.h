@@ -17,35 +17,19 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _AUDIO_ENGINE_H
-#define _AUDIO_ENGINE_H
+#ifndef _MEDIA_ENGINE_H
+#define _MEDIA_ENGINE_H
 
-#include <Entry.h>
-#include <SoundPlayer.h>
-#include <MediaFile.h>
-#include <MediaTrack.h>
-#include <MediaDefs.h>
-#include <Path.h>
-#include <malloc.h>
-
-
-class AudioEngine {
+class MediaEngine {
 	public:
-		bool		IsPlaying() { return isPlaying; };
+		status_t	SetSource(const char *path);
 
-		status_t	InitCheck() { return ((player != NULL)?B_OK:B_ERROR); };
-		status_t	Play();
-		status_t	Stop();
-		
 	private:
-		bool		isPlaying;
-		BSoundPlayer	*player;
-		BMediaFile*	fMediaFile;
+		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
 
-		void		Lock();			// Semaphore locking
-		void		Unlock();
-		sem_id		lock_sem;
-		int32		lock_count;
-};
+	private:
+		BMediaTrack*	fAudioTrack;
+		//AudioOutput*	fAudioOutput;
+}
 
 #endif
