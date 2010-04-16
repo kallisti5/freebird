@@ -20,6 +20,14 @@
 #ifndef _MEDIA_ENGINE_H
 #define _MEDIA_ENGINE_H
 
+#include <Entry.h>
+#include <SoundPlayer.h>
+#include <MediaFile.h>
+#include <MediaTrack.h>
+#include <MediaDefs.h>
+#include <Path.h>
+#include <malloc.h>
+
 class MediaEngine {
 	public:
 		status_t	SetSource(const char *path);
@@ -28,6 +36,7 @@ class MediaEngine {
 		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
 
 	private:
+		BMediaFile*	fMediaFile;
 		BMediaTrack*	fAudioTrack;
 		//AudioOutput*	fAudioOutput;
 }

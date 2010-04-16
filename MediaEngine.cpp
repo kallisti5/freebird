@@ -18,11 +18,12 @@
  */
 
 #include "FreebirdUtils.h"
+#include "MediaEngine.h"
 
-status_t AudioEngine::SetAudioTrack(
+status_t MediaEngine::SetAudioTrack (
 	const char		*path,
 	BMediaTrack		*track,
-	media_format		*format)
+	media_format		*format )
 {
 	if (fAudioTrack != NULL)
 		return (B_ERROR);
@@ -45,7 +46,7 @@ status_t AudioEngine::SetAudioTrack(
 	return (B_NO_ERROR);
 }
 
-status_t AudioEngine::SetSource(const char *path) {
+status_t MediaEngine::SetSource(const char *path) {
 	Utils util;
 
 	status_t	err = B_ERROR;
