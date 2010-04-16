@@ -21,16 +21,17 @@
 #include "MediaEngine.h"
 
 status_t MediaEngine::SetAudioTrack (
-	const char		*path,
-	BMediaTrack		*track,
-	media_format		*format )
+	const char	*path, 
+	BMediaTrack	*track,
+	media_format	*format )
 {
+
 	if (fAudioTrack != NULL)
 		return (B_ERROR);
 
 	fAudioTrack = track;
 
-	/*fAudioOutput = new AudioOutput(fAudioTrack, BPath(path).Leaf());
+	/* fAudioOutput = new AudioOutput(fAudioTrack, BPath(path).Leaf());
 	status_t err = fAudioOutput->InitCheck();
 	if (error != B_NO_ERROR) {
 		delete (fAudioOutput);
@@ -61,7 +62,7 @@ status_t MediaEngine::SetSource(const char *path) {
 	bool		foundTrack = false;
 	int32		numTracks = fMediaFile->CountTracks();
 
-	util.debug("AudioEngine::SetSource examining media file", 0);
+	util.debug("MediaEngine::SetSource examining media file", 0);
 
 	// for each track in media file
 	for (int32 i = 0; i < numTracks; i++) {
@@ -77,7 +78,7 @@ status_t MediaEngine::SetSource(const char *path) {
 
 			if (track->EncodedFormat(&mf) == B_NO_ERROR) {
 
-				util.debug("AudioEngine::SetSource found a valid track",0);
+				util.debug("MediaEngine::SetSource found a valid track",0);
 
 				switch (mf.type) {
 					case B_MEDIA_ENCODED_AUDIO:
@@ -95,7 +96,7 @@ status_t MediaEngine::SetSource(const char *path) {
 			}
 			
 			if (trackUsed) {
-				util.debug("AudioEngine::SetSource found valid track(s)",0);
+				util.debug("Media::SetSource found valid track(s)",0);
 				foundTrack = true;
 			} else
 				fMediaFile->ReleaseTrack(track);
