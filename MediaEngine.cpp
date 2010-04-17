@@ -61,7 +61,7 @@ MediaEngine::SetSource(const char *path) {
 
 	fMediaFile = new BMediaFile(&ref);
 
-	if (fMediaFile = NULL)
+	if (fMediaFile == NULL)
 		return (B_ERROR);
 
 

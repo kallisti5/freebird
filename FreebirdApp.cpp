@@ -102,14 +102,14 @@ int main(void) {
         Utils util; // utilities including debug statements
         util.debug("enter main()", 0);
 
-	MediaEngine *mediaEngine;
+	MediaEngine mediaEngine;
 	FreebirdEngine *theEngine;
 	//FreebirdApp *theApp;
 
 	//theApp = new(FreebirdApp);
 
 	//theEngine->ReindexMusic("/boot/home/Music");
-	mediaEngine->SetSource("/boot/home/develop/freebird/resources/testmp3.mp3");
+	mediaEngine.SetSource("/boot/home/develop/freebird/resources/testmp3.mp3");
 	//theApp->Run();
 	//delete theApp;
         util.debug("exit main()", 1);
