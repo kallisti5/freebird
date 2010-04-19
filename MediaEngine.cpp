@@ -20,6 +20,8 @@
 #include "FreebirdUtils.h"
 #include "MediaEngine.h"
 
+#include <stdio.h>
+
 status_t 
 MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format ) {
 
@@ -86,6 +88,7 @@ MediaEngine::SetSource(const char *path) {
 
 				switch (mf.type) {
 					case B_MEDIA_ENCODED_AUDIO:
+						printf("### Field rate %f\n", mf.u.encoded_video.output.field_rate);
 						if (track->DecodedFormat(&mf) == B_NO_ERROR)
 							trackUsed = SetAudioTrack(path, track, &mf) == B_NO_ERROR;
 						break;
@@ -107,7 +110,12 @@ MediaEngine::SetSource(const char *path) {
 		}
 	}
 
-	// TODO if (foundTrack)
+	if (foundTrack) {
+		status_t err = B_ERROR;
+		//fPlayerThread = spawn_thread(MediaEngine::MediaPlayer, "MediaEngine::MediaPlayer", B_NORMAL_PRIORITY, this);
+		// TODO: finish
+	}
+
 
 	return B_NO_ERROR;
 }
