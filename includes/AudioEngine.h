@@ -31,6 +31,7 @@
 
 class AudioEngine {
 	public:
+				AudioEngine(BMediaTrack *track, const char *name);
 		bool		IsPlaying() { return isPlaying; };
 
 		status_t	InitCheck() { return ((player != NULL)?B_OK:B_ERROR); };
@@ -38,7 +39,16 @@ class AudioEngine {
 		status_t	Stop();
 		
 	private:
+	friend	void		AudioPlay(void *, void *, size_t, const media_raw_audio_format &);
 		bool		isPlaying;
+		int32		frameSize;
+		int32		channelCount;
+		int8		default_data;
+		uint32		frame_size;
+		float		frame_rate;
+		uint32		buffer_size;
+		bigtime_t	perfTime, trackTime;
+
 		BSoundPlayer	*player;
 		BMediaTrack*	track;
 

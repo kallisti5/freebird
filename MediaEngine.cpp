@@ -21,17 +21,16 @@
 #include "MediaEngine.h"
 
 status_t 
-MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format) {
+MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format ) {
 
 	if (fAudioTrack != NULL)
 		return (B_ERROR);
 
 	fAudioTrack = track;
 
-	/*
 	fAudioEngine = new AudioEngine(fAudioTrack, BPath(path).Leaf());
 	status_t err = fAudioEngine->InitCheck();
-	if (error != B_NO_ERROR) {
+	if (err != B_NO_ERROR) {
 		delete (fAudioEngine);
 		fAudioEngine = NULL;
 		fAudioTrack = NULL;
@@ -40,7 +39,6 @@ MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *
 	}
 
 	fAudioDumpingBuffer = malloc(format->u.raw_audio.buffer_size);
-	*/
 
 	return (B_NO_ERROR);
 }

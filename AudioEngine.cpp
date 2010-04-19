@@ -20,6 +20,62 @@
 #include "AudioEngine.h"
 #include "MediaEngine.h"
 
+void AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_format &format)
+{
+
+// TODO: AudioPlay
+
+}
+
+AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name) {
+	media_format	format;
+	
+	lock_count = 0;
+	lock_sem = create_sem(0,"audio_engine ben");
+	track = new_track;
+	isPlaying = false;
+	perfTime = -1;
+	trackTime = 0;
+
+	track->DecodedFormat(&format);
+	switch (format.u.raw_audio.format) {
+		case media_raw_audio_format::B_AUDIO_UCHAR :
+			default_data = 0x80;
+			frame_size = 1;
+			break;
+		case media_raw_audio_format::B_AUDIO_SHORT :
+			default_data = 0;
+			frame_size = 2;
+			break;
+		case media_raw_audio_format::B_AUDIO_INT :
+			default_data = 0;
+			frame_size = 4;
+			break;
+		case media_raw_audio_format::B_AUDIO_FLOAT :
+			default_data = 0;
+			frame_size = 4;
+			break;
+		default :
+			player = NULL;
+			return;
+		}
+
+	channelCount = format.u.raw_audio.channel_count;
+	frame_size *= channelCount;
+	buffer_size = format.u.raw_audio.buffer_size;
+	frame_rate = format.u.raw_audio.frame_rate;
+
+	player = new BSoundPlayer(&format.u.raw_audio, name, AudioPlay);
+	if (player->InitCheck() != B_OK) {
+		delete player;
+		player = NULL;
+	} else {
+		player->SetCookie(this);
+		player->Start();
+		player->SetHasData(true);
+	}
+	
+}
 
 status_t AudioEngine::Play() {
 	Lock();	// Lock our semaphores
