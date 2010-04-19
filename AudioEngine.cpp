@@ -20,11 +20,47 @@
 #include "AudioEngine.h"
 #include "MediaEngine.h"
 
+#include <stdio.h>
+#include <string.h>
+
 void AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_format &format)
 {
+	bool		update_trackTime;
+	int64		frame_count;
+	uint32		i, filled;
+	status_t	err;
+	AudioEngine	*ao;
+	media_header	mh;
 
-// TODO: AudioPlay
+	ao = (AudioEngine*)cookie;
+	ao->Lock();
 
+	update_trackTime = true;
+
+	if (ao->isPlaying) {
+		err = ao->track->ReadFrames((char*)buffer, &frame_count, &mh);
+		if ((err != B_OK) || (frame_count < 0)) {
+			memset((char*)buffer, ao->default_data, ao->buffer_size);
+			update_trackTime = false;
+		} else {
+			filled = ao->frame_size * frame_count;
+			if (filled < ao->buffer_size)
+				memset((char*)buffer+filled, ao->default_data, ao->buffer_size-filled);
+			if (err != B_OK)
+				update_trackTime = false;
+		}
+	} else
+		memset((char*)buffer, ao->default_data, ao->buffer_size);
+	
+		
+	ao->perfTime = ao->player->PerformanceTime();
+	if (update_trackTime)
+		ao->trackTime = ao->track->CurrentTime();
+	else
+		ao->trackTime +=
+			(bigtime_t)(1e6*(float)bufferSize/((float)ao->frame_size*ao->frame_rate));
+
+	ao->Unlock();
 }
 
 AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name) {
