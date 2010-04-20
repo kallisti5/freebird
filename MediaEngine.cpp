@@ -42,6 +42,8 @@ MediaEngine::MediaPlayer( void *arg )
 	int64		numFramesToSkip = 0;
 	int64		numSkippedFrames = 0;
 
+	printf("########### Intial Frame: %Ld, total frame: %Ld\n", audioTrack->CurrentFrame(), numFrames);
+
 	// Main processing loop start,stop
 	while (acquire_sem(view->fPlaySem) == B_OK) {
 		util.debug("Main processing loop",0);
@@ -97,9 +99,30 @@ MediaEngine::MediaPlayer( void *arg )
 
 			}
 
+		if (acquire_sem_etc(view->fPlaySem, 1, B_TIMEOUT, 0) == B_OK)
+			release_sem(view->fPlaySem);
+		else {
+			if (audioTrack != NULL )
+				audioEngine->Stop();
+			goto do_restart;
 		}
+
+		printf("########### Frame: %Ld, total frame: %Ld\n", audioTrack->CurrentFrame(), numFrames);
+
+		}
+		if (audioTrack->CurrentFrame() >= numFrames) {
+do_reset:
+			if (audioTrack != NULL)
+				audioEngine->Stop();
+
+			seekNeeded = true;
+			seekTime = 0LL;
+			scrubbing = true;
+		}
+do_restart:;
 	}
 
+return(B_NO_ERROR);
 }
 
 status_t 

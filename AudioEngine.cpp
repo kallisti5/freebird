@@ -19,6 +19,7 @@
 
 #include "AudioEngine.h"
 #include "MediaEngine.h"
+#include "FreebirdUtils.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -114,6 +115,9 @@ AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name) {
 }
 
 status_t AudioEngine::Play() {
+	Utils util;
+
+	util.debug("AudioEngine::Play called",0);
 	Lock();	// Lock our semaphores
 	isPlaying = true;
 	Unlock(); // Release our semaphores
