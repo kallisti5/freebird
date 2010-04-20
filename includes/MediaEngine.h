@@ -35,12 +35,22 @@ class MediaEngine {
 		status_t	SetSource(const char *path);
 
 	private:
+		static int32	MediaPlayer(void *arg);
 		status_t	SetAudioTrack(const char *path, BMediaTrack *track, media_format *format);
 		void		Reset();
-		BMediaFile*	fMediaFile;
 		AudioEngine*	fAudioEngine;
+		BMediaFile*	fMediaFile;
 		BMediaTrack*	fAudioTrack;
 		void*		fAudioDumpingBuffer;
+		thread_id	fPlayerThread;
+		bigtime_t	fCurTime;
+		bigtime_t	fScrubTime;
+
+		bool		fSnoozing;
+		bool		fPlaying;
+
+		sem_id		fPlaySem;
+		sem_id		fScrubSem;
 };
 
 #endif

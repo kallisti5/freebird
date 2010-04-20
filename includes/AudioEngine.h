@@ -38,6 +38,8 @@ class AudioEngine {
 		status_t	Play();
 		status_t	Stop();
 		
+		bigtime_t	TrackTimebase();
+		
 	private:
 	friend	void		AudioPlay(void *, void *, size_t, const media_raw_audio_format &);
 		bool		isPlaying;

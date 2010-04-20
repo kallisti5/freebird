@@ -134,3 +134,7 @@ void AudioEngine::Unlock() {
 	if (atomic_add(&lock_count, -1) > 1)
 		release_sem(lock_sem);
 }
+
+bigtime_t AudioEngine::TrackTimebase() {
+	return perfTime - trackTime;
+}

@@ -22,11 +22,99 @@
 
 #include <stdio.h>
 
+int32
+MediaEngine::MediaPlayer( void *arg )
+{
+	Utils util;
+
+	MediaEngine*	view = (MediaEngine *)arg;
+	AudioEngine*	audioEngine = view->fAudioEngine;
+	BMediaTrack*	audioTrack = view->fAudioTrack;
+
+	bool		scrubbing = false;
+	bool		seekNeeded = false;
+
+	int64		numFrames = audioTrack->CountFrames();
+
+	bigtime_t	vStartTime, aStartTime, seekTime, snoozeTime, startTime;
+	bigtime_t	curScrubbing, lastScrubbing, lastTime;
+
+	int64		numFramesToSkip = 0;
+	int64		numSkippedFrames = 0;
+
+	// Main processing loop start,stop
+	while (acquire_sem(view->fPlaySem) == B_OK) {
+		util.debug("Main processing loop",0);
+		release_sem(view->fPlaySem);
+
+
+		if (audioTrack != NULL)
+			audioEngine->Play();
+		startTime = system_time()-audioTrack->CurrentTime();
+
+		while((audioTrack->CurrentFrame() < numFrames) || scrubbing) {
+
+			// Entering Scrub mode!
+			if (acquire_sem(view->fScrubSem) == B_OK) {
+				curScrubbing = system_time();
+	
+				if (!scrubbing) {
+					if (audioTrack != NULL)
+						audioEngine->Stop();
+					scrubbing = true;
+				}
+				seekNeeded = true;
+				seekTime = view->fScrubTime;
+			}
+			// Eh.. who needs to scrub?
+			else if (scrubbing) {
+				if (audioTrack != NULL)
+					audioEngine->Play();
+				scrubbing = false;
+			}
+			// Normal play mode (finally!)
+			else {
+				// Estimate snoozeTime
+				if (audioTrack != NULL)
+					startTime = audioEngine->TrackTimebase();
+				else
+					snoozeTime = 25000;
+
+				if (snoozeTime > 5000LL) {
+					view->fSnoozing = true;
+					snooze(snoozeTime-1000);
+					view->fSnoozing = false;
+				} else if (snoozeTime < -5000) {
+					numSkippedFrames++;
+					numFramesToSkip++;
+				}
+
+				if (!scrubbing) {
+					view->fCurTime = system_time() - startTime;
+					if (view->fCurTime < seekTime)
+						view->fCurTime = seekTime;
+				}
+
+			}
+
+		}
+	}
+
+}
+
 status_t 
 MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format ) {
+	Utils util;
 
+	util.debug("MediaEngine::SetAudioTrack enter",0);
+
+	/*
 	if (fAudioTrack != NULL)
+	{
+		util.debug("MediaEngine::SetAudioTrack: fAudioTrack is not null!",0);
 		return (B_ERROR);
+	}
+	*/
 
 	fAudioTrack = track;
 
@@ -112,8 +200,37 @@ MediaEngine::SetSource(const char *path) {
 
 	if (foundTrack) {
 		status_t err = B_ERROR;
-		//fPlayerThread = spawn_thread(MediaEngine::MediaPlayer, "MediaEngine::MediaPlayer", B_NORMAL_PRIORITY, this);
-		// TODO: finish
+		fPlayerThread = spawn_thread(MediaEngine::MediaPlayer, "MediaEngine::MediaPlayer", B_NORMAL_PRIORITY, this);
+
+		if (fPlayerThread < B_NO_ERROR) {
+			err = fPlayerThread;
+			fPlayerThread = B_ERROR;
+			Reset();
+			
+			return (err);
+		}
+
+		fPlaySem = create_sem(0, "MediaEngine::fPlaySem");
+		
+		if (fPlaySem < B_NO_ERROR) {
+			err = fPlaySem;
+			fPlaySem = B_ERROR;
+			Reset();
+			
+			return (err);
+		}
+
+		err = resume_thread(fPlayerThread);
+
+		if (err != B_NO_ERROR) {
+			kill_thread(fPlayerThread);
+			fPlayerThread = B_ERROR;
+			Reset();
+
+			return (err);
+		}
+
+		//fMediaBar->SetTotalTime(fAudioTrack->Duration());
 	}
 
 
