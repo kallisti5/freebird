@@ -17,23 +17,24 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include <Entry.h>
 #include <storage/Directory.h>
 
 #include "FreebirdUtils.h"
 #include "FreebirdEngine.h"
 
+
 bool FreebirdEngine::ReindexMusic(const char *path)
 {
-        Utils util; // utilities including debug statements
+	Utils util; // utilities including debug statements
 	util.debug("FreebirdEngine::ReindexMusic called",0);
 
-        BDirectory dir(path);
-        BEntry entry;
+	BDirectory dir(path);
+	BEntry entry;
 
-        dir.Rewind();
-        while (dir.GetNextEntry(&entry) == B_OK)
-                {
-                        util.debug("FreebirdEngine::ReindexMusic found a file",0);
-                }
+	dir.Rewind();
+	while (dir.GetNextEntry(&entry) == B_OK) {
+		util.debug("FreebirdEngine::ReindexMusic found a file",0);
+	}
 }

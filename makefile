@@ -30,11 +30,11 @@ TYPE=app
 #	if two source files with the same name (source.c or source.cpp)
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
-SRCS= MediaEngine.cpp AudioEngine.cpp FreebirdEngine.cpp FreebirdUtils.cpp FreebirdApp.cpp
+SRCS=MediaEngine.cpp AudioEngine.cpp FreebirdEngine.cpp FreebirdUtils.cpp FreebirdApp.cpp
 
 #	specify the resource definition files to use
 #	full path or a relative path to the resource file can be used.
-RDEFS= Freebird.rdef
+RDEFS=Freebird.rdef
 	
 #	specify the resource files to use. 
 #	full path or a relative path to the resource file can be used.
@@ -56,7 +56,7 @@ RSRCS=
 #		naming scheme you need to specify the path to the library
 #		and it's name
 #		library: my_lib.a entry: my_lib.a or path/my_lib.a
-LIBS= be media
+LIBS=be media stdc++
 
 #	specify additional paths to directories following the standard
 #	libXXX.so or libXXX.a naming scheme.  You can specify full paths
@@ -64,17 +64,17 @@ LIBS= be media
 #	be recursive, so include all of the paths where libraries can
 #	be found.  Directories where source files are found are
 #	automatically included.
-LIBPATHS= 
+LIBPATHS=
 
 #	additional paths to look for system headers
 #	thes use the form: #include <header>
 #	source file directories are NOT auto-included here
-SYSTEM_INCLUDE_PATHS = 
+SYSTEM_INCLUDE_PATHS=
 
 #	additional paths to look for local headers
 #	thes use the form: #include "header"
 #	source file directories are automatically included
-LOCAL_INCLUDE_PATHS = includes
+LOCAL_INCLUDE_PATHS=includes
 
 #	specify the level of optimization that you desire
 #	NONE, SOME, FULL
@@ -91,35 +91,35 @@ DEFINES=
 #	if unspecified default warnings will be used
 #	NONE = supress all warnings
 #	ALL = enable all warnings
-WARNINGS = 
+WARNINGS=
 
 #	specify whether image symbols will be created
 #	so that stack crawls in the debugger are meaningful
 #	if TRUE symbols will be created
-SYMBOLS = TRUE
+SYMBOLS=TRUE
 
 #	specify debug settings
 #	if TRUE will allow application to be run from a source-level
 #	debugger.  Note that this will disable all optimzation.
-DEBUGGER = TRUE
+DEBUGGER=TRUE
 
 #	specify additional compiler flags for all files
-COMPILER_FLAGS =
+COMPILER_FLAGS=
 
 #	specify additional linker flags
-LINKER_FLAGS =
+LINKER_FLAGS=
 
 #	specify the version of this particular item
 #	(for example, -app 3 4 0 d 0 -short 340 -long "340 "`echo -n -e '\302\251'`"1999 GNU GPL") 
 #	This may also be specified in a resource.
-APP_VERSION = 
+APP_VERSION=
 
 #	(for TYPE == DRIVER only) Specify desired location of driver in the /dev
 #	hierarchy. Used by the driverinstall rule. E.g., DRIVER_PATH = video/usb will
 #	instruct the driverinstall rule to place a symlink to your driver's binary in
 #	~/add-ons/kernel/drivers/dev/video/usb, so that your driver will appear at
 #	/dev/video/usb when loaded. Default is "misc".
-DRIVER_PATH = 
+DRIVER_PATH=
 
 ## include the makefile-engine
 include $(BUILDHOME)/etc/makefile-engine

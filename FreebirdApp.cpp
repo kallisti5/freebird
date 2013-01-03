@@ -104,14 +104,14 @@ int main(void) {
 
 	MediaEngine mediaEngine;
 	FreebirdEngine *theEngine;
-	//FreebirdApp *theApp;
+	FreebirdApp *theApp;
 
-	//theApp = new(FreebirdApp);
+	theApp = new(FreebirdApp);
 
-	//theEngine->ReindexMusic("/boot/home/Music");
+	theEngine->ReindexMusic("/boot/home/Music");
 	mediaEngine.SetSource("/boot/home/develop/freebird/resources/testmp3.mp3");
-	//theApp->Run();
-	//delete theApp;
+	theApp->Run();
+	delete theApp;
         util.debug("exit main()", 1);
 	return 0;
 }
