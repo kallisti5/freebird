@@ -9,23 +9,33 @@
 
 #include "AudioEngine.h"
 #include "MediaEngine.h"
-#include "FreebirdUtils.h"
 
 #include <stdio.h>
 #include <string.h>
 
 
+#define DEBUG_AUDIOENGINE
+#ifdef DEBUG_AUDIOENGINE
+#define TRACE(x...) printf("AudioEngine: " x)
+#define CALLED() TRACE("called %s\n", __PRETTY_FUNCTION__)
+#else
+#define TRACE(x...)
+#define CALLED()
+#endif
+
+#define ERROR(x...) printf("AudioEngine: " x)
+
+
 void
 AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_format &format)
 {
-	bool		update_trackTime;
-	int64		frame_count;
-	uint32		i, filled;
-	status_t	err;
-	AudioEngine	*ao;
-	media_header	mh;
+	bool update_trackTime;
+	int64 frame_count;
+	uint32 i, filled;
+	status_t err;
+	media_header mh;
 
-	ao = (AudioEngine*)cookie;
+	AudioEngine* ao = (AudioEngine*)cookie;
 	ao->Lock();
 
 	update_trackTime = true;
@@ -59,7 +69,7 @@ AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_f
 
 AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name)
 {
-	media_format	format;
+	media_format format;
 	
 	lock_count = 0;
 	lock_sem = create_sem(0,"audio_engine ben");
@@ -112,9 +122,8 @@ AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name)
 status_t
 AudioEngine::Play()
 {
-	Utils util;
+	CALLED();
 
-	util.debug("AudioEngine::Play called",0);
 	Lock();	// Lock our semaphores
 	isPlaying = true;
 	Unlock(); // Release our semaphores

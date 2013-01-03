@@ -30,7 +30,7 @@ TYPE=app
 #	if two source files with the same name (source.c or source.cpp)
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
-SRCS=MediaEngine.cpp AudioEngine.cpp FreebirdEngine.cpp FreebirdUtils.cpp FreebirdApp.cpp
+SRCS=MediaEngine.cpp AudioEngine.cpp FreebirdEngine.cpp FreebirdApp.cpp
 
 #	specify the resource definition files to use
 #	full path or a relative path to the resource file can be used.

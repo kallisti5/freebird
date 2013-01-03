@@ -7,39 +7,48 @@
  */
  
 
-#include "FreebirdUtils.h"
 #include "MediaEngine.h"
 
 #include <stdio.h>
 
 
+#define DEBUG_MEDIAENGINE
+#ifdef DEBUG_MEDIAENGINE
+#define TRACE(x...) printf("MediaEngine: " x)
+#define CALLED() TRACE("called %s\n", __PRETTY_FUNCTION__)
+#else
+#define TRACE(x...)
+#define CALLED()
+#endif
+
+#define ERROR(x...) printf("MediaEngine: " x)
+
+
 int32
 MediaEngine::MediaPlayer( void *arg )
 {
-	Utils util;
+	MediaEngine* view = (MediaEngine *)arg;
+	AudioEngine* audioEngine = view->fAudioEngine;
+	BMediaTrack* audioTrack = view->fAudioTrack;
 
-	MediaEngine*	view = (MediaEngine *)arg;
-	AudioEngine*	audioEngine = view->fAudioEngine;
-	BMediaTrack*	audioTrack = view->fAudioTrack;
+	bool scrubbing = false;
+	bool seekNeeded = false;
 
-	bool		scrubbing = false;
-	bool		seekNeeded = false;
+	int64 numFrames = audioTrack->CountFrames();
 
-	int64		numFrames = audioTrack->CountFrames();
+	bigtime_t vStartTime, aStartTime, seekTime, snoozeTime, startTime;
+	bigtime_t curScrubbing, lastScrubbing, lastTime;
 
-	bigtime_t	vStartTime, aStartTime, seekTime, snoozeTime, startTime;
-	bigtime_t	curScrubbing, lastScrubbing, lastTime;
+	int64 numFramesToSkip = 0;
+	int64 numSkippedFrames = 0;
 
-	int64		numFramesToSkip = 0;
-	int64		numSkippedFrames = 0;
-
-	printf("########### Intial Frame: %Ld, total frame: %Ld\n", audioTrack->CurrentFrame(), numFrames);
+	TRACE("%s: Initial Frame: %Ld, total frames: %Ld\n", __func__,
+		audioTrack->CurrentFrame(), numFrames);
 
 	// Main processing loop start,stop
 	while (acquire_sem(view->fPlaySem) == B_OK) {
-		util.debug("Main processing loop",0);
+		TRACE("%s: Enter main processing loop\n", __func__);
 		release_sem(view->fPlaySem);
-
 
 		if (audioTrack != NULL)
 			audioEngine->Play();
@@ -90,17 +99,19 @@ MediaEngine::MediaPlayer( void *arg )
 
 			}
 
-		if (acquire_sem_etc(view->fPlaySem, 1, B_TIMEOUT, 0) == B_OK)
-			release_sem(view->fPlaySem);
-		else {
-			if (audioTrack != NULL )
-				audioEngine->Stop();
-			goto do_restart;
+			if (acquire_sem_etc(view->fPlaySem, 1, B_TIMEOUT, 0) == B_OK)
+				release_sem(view->fPlaySem);
+			else {
+				if (audioTrack != NULL )
+					audioEngine->Stop();
+				goto do_restart;
+			}
+
+			TRACE("%s: Initial Frame: %Ld, total frames: %Ld\n", __func__,
+				audioTrack->CurrentFrame(), numFrames);
+
 		}
 
-		printf("########### Frame: %Ld, total frame: %Ld\n", audioTrack->CurrentFrame(), numFrames);
-
-		}
 		if (audioTrack->CurrentFrame() >= numFrames) {
 do_reset:
 			if (audioTrack != NULL)
@@ -116,11 +127,12 @@ do_restart:;
 return(B_NO_ERROR);
 }
 
-status_t 
-MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *format ) {
-	Utils util;
 
-	util.debug("MediaEngine::SetAudioTrack enter",0);
+status_t 
+MediaEngine::SetAudioTrack(const char *path, BMediaTrack *track,
+	media_format *format)
+{
+	CALLED();
 
 	/*
 	if (fAudioTrack != NULL)
@@ -147,19 +159,17 @@ MediaEngine::SetAudioTrack( const char *path, BMediaTrack *track, media_format *
 	return (B_NO_ERROR);
 }
 
+
 status_t
-MediaEngine::SetSource(const char *path) {
-	Utils util;
-
-	status_t	err = B_ERROR;
-	entry_ref	ref;
-
-	err = get_ref_for_path(path, &ref);
+MediaEngine::SetSource(const char *path)
+{
+	entry_ref ref;
+	status_t err = get_ref_for_path(path, &ref);
 
 	if (err != B_NO_ERROR)
 		return (err);
 
-	util.debug("MediaEngine::SetSource passing media file reference to BMediaFile", 0);
+	TRACE("%s: Passing media file references to BMediaFile...\n", __func__);
 
 	fMediaFile = new BMediaFile(&ref);
 
@@ -167,10 +177,10 @@ MediaEngine::SetSource(const char *path) {
 		return (B_ERROR);
 
 
-	bool		foundTrack = false;
-	int32		numTracks = fMediaFile->CountTracks();
+	bool foundTrack = false;
+	int32 numTracks = fMediaFile->CountTracks();
 
-	util.debug("MediaEngine::SetSource examining media file", 0);
+	TRACE("%s: examining media file...\n", __func__);
 
 	// for each track in media file
 	for (int32 i = 0; i < numTracks; i++) {
@@ -179,18 +189,17 @@ MediaEngine::SetSource(const char *path) {
 		if (track == NULL) {
 			Reset();
 			return (B_ERROR);
-		}
-		else {
-			bool		trackUsed = false;
-			media_format	mf;
+		} else {
+			bool trackUsed = false;
+			media_format mf;
 
 			if (track->EncodedFormat(&mf) == B_NO_ERROR) {
-
-				util.debug("MediaEngine::SetSource found a valid track",0);
+				TRACE("%s: found a valid track.\n", __func__);
 
 				switch (mf.type) {
 					case B_MEDIA_ENCODED_AUDIO:
-						printf("### Field rate %f\n", mf.u.encoded_video.output.field_rate);
+						TRACE("%s: Field rate %f\n", __func__,
+							mf.u.encoded_video.output.field_rate);
 						if (track->DecodedFormat(&mf) == B_NO_ERROR)
 							trackUsed = SetAudioTrack(path, track, &mf) == B_NO_ERROR;
 						break;
@@ -205,7 +214,7 @@ MediaEngine::SetSource(const char *path) {
 			}
 			
 			if (trackUsed) {
-				util.debug("Media::SetSource found valid track(s)",0);
+				TRACE("%s: found valid track(s)\n", __func__);
 				foundTrack = true;
 			} else
 				fMediaFile->ReleaseTrack(track);
@@ -251,12 +260,12 @@ MediaEngine::SetSource(const char *path) {
 	return B_NO_ERROR;
 }
 
-void MediaEngine::Reset()
+
+void
+MediaEngine::Reset()
 {
+	fAudioTrack = NULL;
 
-fAudioTrack = NULL;
-
-delete(fMediaFile);
-fMediaFile = NULL;
-
+	delete(fMediaFile);
+	fMediaFile = NULL;
 }

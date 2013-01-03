@@ -8,23 +8,34 @@
  
 
 #include <Entry.h>
+#include <stdio.h>
 #include <storage/Directory.h>
 
-#include "FreebirdUtils.h"
 #include "FreebirdEngine.h"
+
+
+#define DEBUG_ENGINE
+#ifdef DEBUG_ENGINE
+#define TRACE(x...) printf("FreebirdEngine: " x)
+#define CALLED() TRACE("called %s\n", __PRETTY_FUNCTION__)
+#else
+#define TRACE(x...)
+#define CALLED()
+#endif
+
+#define ERROR(x...) printf("FreebirdEngine: " x)
 
 
 bool
 FreebirdEngine::ReindexMusic(const char *path)
 {
-	Utils util; // utilities including debug statements
-	util.debug("FreebirdEngine::ReindexMusic called",0);
+	CALLED();
 
 	BDirectory dir(path);
 	BEntry entry;
 
 	dir.Rewind();
 	while (dir.GetNextEntry(&entry) == B_OK) {
-		util.debug("FreebirdEngine::ReindexMusic found a file",0);
+		TRACE("FreebirdEngine::ReindexMusic found a file");
 	}
 }
