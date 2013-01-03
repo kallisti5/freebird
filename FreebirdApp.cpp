@@ -1,21 +1,11 @@
 /*
  * Freebird, the Music Jukebox for Haiku
- * 2010, Alexander von Gluck
+ * Copyright 2010-2013, Alexander von Gluck IV
+ * Released under the terms of the MIT license
+ *
  * http://unixzen.com, http://github.com/kallisti5
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
 
 #include <Application.h>
 #include <Window.h>
@@ -34,13 +24,17 @@ class PlayerView : public BView {
                 virtual void    Draw(BRect updateRect);
 };
 
+
 PlayerView::PlayerView(BRect frame)
                 : BView(frame, "FreeBird Player", B_FOLLOW_ALL_SIDES, B_WILL_DRAW) {
 
 }
 
+
 // Draw our player view
-void PlayerView::Draw(BRect updateRect) {
+void
+PlayerView::Draw(BRect updateRect)
+{
 	Utils util;
 
 	util.debug("PlayerView::Draw called",0);
@@ -67,6 +61,7 @@ class PlayerWindow : public BWindow {
 	virtual bool	QuitRequested();
 };
 
+
 PlayerWindow::PlayerWindow(BRect frame)
 		: BWindow(frame, "Freebird Player",
 			B_FLOATING_WINDOW_LOOK, B_NORMAL_WINDOW_FEEL, B_NOT_RESIZABLE|B_NOT_ZOOMABLE|B_ASYNCHRONOUS_CONTROLS) {
@@ -74,10 +69,12 @@ PlayerWindow::PlayerWindow(BRect frame)
 			Show();
 }
 
+
 bool PlayerWindow::QuitRequested() {
 	be_app->PostMessage(B_QUIT_REQUESTED);
 	return true;
 }
+
 
 // Our Application
 class FreebirdApp : public BApplication {
@@ -88,6 +85,7 @@ class FreebirdApp : public BApplication {
                 PlayerWindow    *theWindow;
 };
 
+
 FreebirdApp::FreebirdApp()
                 : BApplication("application/x-vnd.FreeBird") {
         BRect windowRect;
@@ -97,10 +95,11 @@ FreebirdApp::FreebirdApp()
 }
 
 
-int main(void) {
-
-        Utils util; // utilities including debug statements
-        util.debug("enter main()", 0);
+int
+main(void)
+{
+	Utils util; // utilities including debug statements
+	util.debug("enter main()", 0);
 
 	MediaEngine mediaEngine;
 	FreebirdEngine *theEngine;
@@ -109,9 +108,10 @@ int main(void) {
 	theApp = new(FreebirdApp);
 
 	theEngine->ReindexMusic("/boot/home/Music");
-	mediaEngine.SetSource("/boot/home/develop/freebird/resources/testmp3.mp3");
+	mediaEngine.SetSource("/Data/Projects/freebird/resources/testmp3.mp3");
 	theApp->Run();
 	delete theApp;
-        util.debug("exit main()", 1);
+	util.debug("exit main()", 1);
+
 	return 0;
 }

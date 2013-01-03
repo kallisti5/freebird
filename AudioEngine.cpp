@@ -1,21 +1,11 @@
 /*
  * Freebird, the Music Jukebox for Haiku
- * 2010, Alexander von Gluck
+ * Copyright 2010-2013, Alexander von Gluck IV
+ * Released under the terms of the MIT license
+ *
  * http://unixzen.com, http://github.com/kallisti5
- *
- *   This program is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 
 #include "AudioEngine.h"
 #include "MediaEngine.h"
@@ -24,7 +14,9 @@
 #include <stdio.h>
 #include <string.h>
 
-void AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_format &format)
+
+void
+AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_audio_format &format)
 {
 	bool		update_trackTime;
 	int64		frame_count;
@@ -64,7 +56,9 @@ void AudioPlay(void *cookie, void *buffer, size_t bufferSize, const media_raw_au
 	ao->Unlock();
 }
 
-AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name) {
+
+AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name)
+{
 	media_format	format;
 	
 	lock_count = 0;
@@ -114,7 +108,10 @@ AudioEngine::AudioEngine(BMediaTrack *new_track, const char *name) {
 	
 }
 
-status_t AudioEngine::Play() {
+
+status_t
+AudioEngine::Play()
+{
 	Utils util;
 
 	util.debug("AudioEngine::Play called",0);
@@ -124,21 +121,30 @@ status_t AudioEngine::Play() {
 	return B_NO_ERROR;
 }
 
-status_t AudioEngine::Stop() {
+
+status_t AudioEngine::Stop()
+{
 	isPlaying = false;
 	return B_NO_ERROR;
 }
 
-void AudioEngine::Lock() {
+
+void AudioEngine::Lock()
+{
 	if (atomic_add(&lock_count, 1) > 0)
 		acquire_sem(lock_sem);
 }
 
-void AudioEngine::Unlock() {
+
+void AudioEngine::Unlock()
+{
 	if (atomic_add(&lock_count, -1) > 1)
 		release_sem(lock_sem);
 }
 
-bigtime_t AudioEngine::TrackTimebase() {
+
+bigtime_t
+AudioEngine::TrackTimebase()
+{
 	return perfTime - trackTime;
 }
